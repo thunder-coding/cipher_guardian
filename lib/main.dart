@@ -42,8 +42,6 @@ class SettingsPage extends StatelessWidget {
 class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
 
-  
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -52,26 +50,20 @@ class _MyAppState extends State<MyApp> {
 
   late List<Widget> _pages;
 
-
-
   @override
   void initState() {
     super.initState();
-    _pages = [
-    HomePage(),
-    PasswordPage(),
-    TOTPpage(),
-    SettingsPage(),
-    ];
+    _pages = [HomePage(), PasswordPage(), TOTPpage(), SettingsPage()];
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: Scaffold(
         body: _pages[_selectedIndex],
-        
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {},
           label: Text("Add", style: TextStyle(color: Colors.white)),
@@ -81,19 +73,22 @@ class _MyAppState extends State<MyApp> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.key),label: 'Password'),
-            BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'TOTP'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            _onItemTapped(index);
+          },
+          selectedIndex: _selectedIndex,
+          destinations: const [
+            NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+            NavigationDestination(icon: Icon(Icons.key), label: 'Password'),
+            NavigationDestination(icon: Icon(Icons.access_time), label: 'TOTP'),
+            NavigationDestination(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
           ],
-          selectedItemColor: Colors.purpleAccent,
-          unselectedItemColor: Colors.grey,
         ),
       ),
     );
   }
-} 
+}
