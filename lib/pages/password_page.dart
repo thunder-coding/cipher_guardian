@@ -66,7 +66,7 @@ class _AccTilesState extends State<AccTiles> {
                     }
                   },
                 ),
-                onTap: () {
+                onLongPress: () {
                   Clipboard.setData(
                     ClipboardData(text: snapshot.data!.password),
                   );
