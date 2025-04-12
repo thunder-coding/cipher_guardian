@@ -1,56 +1,63 @@
+import 'package:cipher_guardian/passwords/store.dart';
 import 'package:flutter/material.dart';
+import 'password_info.dart';
 
 class PasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: ThemeData(useMaterial3: true),
-    debugShowCheckedModeBanner: false,
-    home: const AccTiles());
+    return const AccTiles();
   }
 }
 
-class AccTiles extends StatelessWidget {
+class AccTiles extends StatefulWidget {
   const AccTiles({super.key});
+
+  @override
+  _AccTilesState createState() => _AccTilesState();
+}
+
+class _AccTilesState extends State<AccTiles> {
+  PasswordStore store = PasswordStore();
+  int _itemCount = 0;
+
+  @override
+  initState() {
+    super.initState();
+    store.init().then((_) {
+      setState(() {
+        store.getCount().then((value) {
+          _itemCount = value;
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      body: ListView(
-        children: const <Widget>[
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.person),
-              title: Text("GitHub"),
-              subtitle: Text("PassWord : **** ****"),
-              trailing: Icon(Icons.more_vert),
+      body: ListView.builder(
+        itemCount: _itemCount,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text('Account $index'),
+            subtitle: Text('Subtitle $index'),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {},
             ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Discord"),
-              subtitle: Text("PassWord : **** ****"),
-              trailing: Icon(Icons.more_vert),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PasswordInfoWrapper(),
             ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Reddit"),
-              subtitle: Text("PassWord : **** ****"),
-              trailing: Icon(Icons.more_vert),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Gmail"),
-              subtitle: Text("PassWord : **** ****"),
-              trailing: Icon(Icons.more_vert),
-            ),
-          ),
-        ],
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -39,15 +39,6 @@ class _MyAppState extends State<MyApp> {
       darkTheme: ThemeData.dark(),
       home: Scaffold(
         body: _pages[_selectedIndex],
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
-          label: Text("Add", style: TextStyle(color: Colors.white)),
-          icon: Icon(Icons.add, color: Colors.white),
-          backgroundColor:
-              ColorScheme.fromSeed(seedColor: Colors.purpleAccent).primary,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (int index) {
             _onItemTapped(index);
