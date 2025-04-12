@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'pages/totp_page.dart';
+import 'pages/settings_page.dart';
+import 'pages/password_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,34 +12,6 @@ class MyApp extends StatefulWidget {
 
   @override
   _MyAppState createState() => _MyAppState();
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center();
-  }
-}
-
-class PasswordPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center();
-  }
-}
-
-class TOTPpage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center();
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center();
-  }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -53,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _pages = [HomePage(), PasswordPage(), TOTPpage(), SettingsPage()];
+    _pages = [PasswordPage(), TOTPpage(), SettingsPage()];
   }
 
   @override
@@ -79,7 +54,6 @@ class _MyAppState extends State<MyApp> {
           },
           selectedIndex: _selectedIndex,
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
             NavigationDestination(icon: Icon(Icons.key), label: 'Password'),
             NavigationDestination(icon: Icon(Icons.access_time), label: 'TOTP'),
             NavigationDestination(
