@@ -2,6 +2,18 @@ import 'dart:math';
 
 enum PasswordType { numeric, alphaNumeric, alpha }
 
+extension PasswordTypeExtension on PasswordType {
+  String get name {
+    switch (this) {
+      case PasswordType.numeric:
+        return 'Numeric';
+      case PasswordType.alphaNumeric:
+        return 'Alpha Numeric';
+      case PasswordType.alpha:
+        return 'Alpha';
+    }
+  }
+}
 enum AlphabetCase { lowercase, uppercase, mixed }
 
 const String _lowercase = 'abcdefghijklmnopqrstuvwxyz';

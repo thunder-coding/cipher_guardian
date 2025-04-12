@@ -162,18 +162,17 @@ class _PasswordInfoState extends State<PasswordInfo> {
                     const SizedBox(height: 20),
                     const Text('Password Type'),
                     DropdownButtonFormField(
-                      items: const [
+                      items: [
                         DropdownMenuItem(
                           value: PasswordType.alphaNumeric,
-                          child: Text('Alpha Numeric'),
-                        ),
+                          child: Text(PasswordTypeExtension(PasswordType.alphaNumeric).name)),
                         DropdownMenuItem(
                           value: PasswordType.alpha,
-                          child: Text('Alpha'),
+                          child: Text(PasswordTypeExtension(PasswordType.alpha).name),
                         ),
                         DropdownMenuItem(
                           value: PasswordType.numeric,
-                          child: Text('Numeric'),
+                          child: Text(PasswordTypeExtension(PasswordType.numeric).name),
                         ),
                       ],
                       onChanged: (value) {
