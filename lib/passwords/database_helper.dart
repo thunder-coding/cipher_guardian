@@ -2,7 +2,7 @@ import 'package:cipher_guardian/passwords/generate.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
-class Constants {
+class PasswordDBConstants {
   static const tableName = 'passwords';
   static const idColumn = 'id';
   static const domainColumn = 'domain';
@@ -36,23 +36,23 @@ class PasswordDBHelper {
     String password = await secureStorage.read(key: 'passwordDB') ?? '';
 
     db = await openDatabase(
-      Constants.passwordDBName,
+      PasswordDBConstants.passwordDBName,
       version: 1,
       password: password,
       onCreate: (db, version) async {
         await db.execute('''
-      CREATE TABLE IF NOT EXISTS ${Constants.tableName} (
-        ${Constants.idColumn} INTEGER PRIMARY KEY AUTOINCREMENT,
-        ${Constants.domainColumn} TEXT NOT NULL,
-        ${Constants.usernameColumn} TEXT NOT NULL,
-        ${Constants.lengthColumn} INTEGER NOT NULL,
-        ${Constants.passwordColumn} TEXT NOT NULL,
-        ${Constants.passwordTypeColumn} TEXT NOT NULL,
-        ${Constants.alphabetCaseColumn} TEXT NOT NULL,
-        ${Constants.includeSpecialCharsColumn} BOOLEAN NOT NULL,
-        ${Constants.includeSpacesColumn} BOOLEAN NOT NULL,
-        ${Constants.strictColumn} BOOLEAN NOT NULL,
-        ${Constants.generatedTimestampColumn} INTEGER NOT NULL
+      CREATE TABLE IF NOT EXISTS ${PasswordDBConstants.tableName} (
+        ${PasswordDBConstants.idColumn} INTEGER PRIMARY KEY AUTOINCREMENT,
+        ${PasswordDBConstants.domainColumn} TEXT NOT NULL,
+        ${PasswordDBConstants.usernameColumn} TEXT NOT NULL,
+        ${PasswordDBConstants.lengthColumn} INTEGER NOT NULL,
+        ${PasswordDBConstants.passwordColumn} TEXT NOT NULL,
+        ${PasswordDBConstants.passwordTypeColumn} TEXT NOT NULL,
+        ${PasswordDBConstants.alphabetCaseColumn} TEXT NOT NULL,
+        ${PasswordDBConstants.includeSpecialCharsColumn} BOOLEAN NOT NULL,
+        ${PasswordDBConstants.includeSpacesColumn} BOOLEAN NOT NULL,
+        ${PasswordDBConstants.strictColumn} BOOLEAN NOT NULL,
+        ${PasswordDBConstants.generatedTimestampColumn} INTEGER NOT NULL
       );
     ''');
       },
@@ -71,24 +71,24 @@ class PasswordDBHelper {
     required int generatedTimestamp,
     required String password,
   }) async {
-    await db!.insert(Constants.tableName, {
-      Constants.domainColumn: domain,
-      Constants.usernameColumn: username,
-      Constants.lengthColumn: length,
-      Constants.passwordColumn: password,
-      Constants.passwordTypeColumn: passwordType.index,
-      Constants.alphabetCaseColumn: alphabetCase.index,
-      Constants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
-      Constants.includeSpacesColumn: includeSpaces ? 1 : 0,
-      Constants.strictColumn: strict ? 1 : 0,
-      Constants.generatedTimestampColumn: generatedTimestamp,
+    await db!.insert(PasswordDBConstants.tableName, {
+      PasswordDBConstants.domainColumn: domain,
+      PasswordDBConstants.usernameColumn: username,
+      PasswordDBConstants.lengthColumn: length,
+      PasswordDBConstants.passwordColumn: password,
+      PasswordDBConstants.passwordTypeColumn: passwordType.index,
+      PasswordDBConstants.alphabetCaseColumn: alphabetCase.index,
+      PasswordDBConstants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
+      PasswordDBConstants.includeSpacesColumn: includeSpaces ? 1 : 0,
+      PasswordDBConstants.strictColumn: strict ? 1 : 0,
+      PasswordDBConstants.generatedTimestampColumn: generatedTimestamp,
     });
   }
 
   deletePassword(int id) async {
     await db?.delete(
       'passwords',
-      where: '${Constants.idColumn} = ?',
+      where: '${PasswordDBConstants.idColumn} = ?',
       whereArgs: [id],
     );
   }
@@ -107,29 +107,29 @@ class PasswordDBHelper {
     required String password,
   }) async {
     await db!.update(
-      Constants.tableName,
+      PasswordDBConstants.tableName,
       {
-        Constants.domainColumn: domain,
-        Constants.usernameColumn: username,
-        Constants.lengthColumn: length,
-        Constants.passwordColumn: password,
-        Constants.passwordTypeColumn: passwordType.index,
-        Constants.alphabetCaseColumn: alphabetCase.index,
-        Constants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
-        Constants.includeSpacesColumn: includeSpaces ? 1 : 0,
-        Constants.strictColumn: strict ? 1 : 0,
-        Constants.generatedTimestampColumn: generatedTimestamp,
+        PasswordDBConstants.domainColumn: domain,
+        PasswordDBConstants.usernameColumn: username,
+        PasswordDBConstants.lengthColumn: length,
+        PasswordDBConstants.passwordColumn: password,
+        PasswordDBConstants.passwordTypeColumn: passwordType.index,
+        PasswordDBConstants.alphabetCaseColumn: alphabetCase.index,
+        PasswordDBConstants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
+        PasswordDBConstants.includeSpacesColumn: includeSpaces ? 1 : 0,
+        PasswordDBConstants.strictColumn: strict ? 1 : 0,
+        PasswordDBConstants.generatedTimestampColumn: generatedTimestamp,
       },
-      where: '${Constants.idColumn} = ?',
+      where: '${PasswordDBConstants.idColumn} = ?',
       whereArgs: [id],
     );
   }
 
   getElementAtPos(int pos, String searchTerm) async {
     return await db!.query(
-      Constants.tableName,
+      PasswordDBConstants.tableName,
       where:
-          '${Constants.domainColumn} LIKE ? OR ${Constants.usernameColumn} LIKE ?',
+          '${PasswordDBConstants.domainColumn} LIKE ? OR ${PasswordDBConstants.usernameColumn} LIKE ?',
       whereArgs: ['%$searchTerm%', '%$searchTerm%'],
       limit: 1,
       offset: pos,
@@ -138,19 +138,19 @@ class PasswordDBHelper {
 
   getElementAtId(int id) async {
     return await db?.query(
-      Constants.tableName,
-      where: '${Constants.idColumn} = ?',
+      PasswordDBConstants.tableName,
+      where: '${PasswordDBConstants.idColumn} = ?',
       whereArgs: [id],
     );
   }
 
   Future<int?> getCount() async {
     return Sqflite.firstIntValue(
-      await db!.rawQuery('SELECT COUNT(*) FROM ${Constants.tableName}'),
+      await db!.rawQuery('SELECT COUNT(*) FROM ${PasswordDBConstants.tableName}'),
     );
   }
 
   clear() async {
-    await db?.delete(Constants.tableName);
+    await db?.delete(PasswordDBConstants.tableName);
   }
 }

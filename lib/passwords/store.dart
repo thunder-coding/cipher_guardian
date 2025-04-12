@@ -134,19 +134,19 @@ class PasswordStore {
   Future<Entry> getElementAtPos(int pos, String searchTerm) async {
     List<Map> q = await dbHelper.getElementAtPos(pos, searchTerm);
     Entry entry = Entry(
-      id: q[0][Constants.idColumn],
-      domain: q[0][Constants.domainColumn],
-      username: q[0][Constants.usernameColumn],
-      password: q[0][Constants.passwordColumn],
-      length: q[0][Constants.lengthColumn],
+      id: q[0][PasswordDBConstants.idColumn],
+      domain: q[0][PasswordDBConstants.domainColumn],
+      username: q[0][PasswordDBConstants.usernameColumn],
+      password: q[0][PasswordDBConstants.passwordColumn],
+      length: q[0][PasswordDBConstants.lengthColumn],
       passwordType:
-          PasswordType.values[int.parse(q[0][Constants.passwordTypeColumn])],
+          PasswordType.values[int.parse(q[0][PasswordDBConstants.passwordTypeColumn])],
       alphabetCase:
-          AlphabetCase.values[int.parse(q[0][Constants.alphabetCaseColumn])],
-      includeSpecialChars: q[0][Constants.includeSpecialCharsColumn] == 1,
-      includeSpaces: q[0][Constants.includeSpacesColumn] == 1,
-      strict: q[0][Constants.strictColumn] == 1,
-      generatedTimestamp: q[0][Constants.generatedTimestampColumn],
+          AlphabetCase.values[int.parse(q[0][PasswordDBConstants.alphabetCaseColumn])],
+      includeSpecialChars: q[0][PasswordDBConstants.includeSpecialCharsColumn] == 1,
+      includeSpaces: q[0][PasswordDBConstants.includeSpacesColumn] == 1,
+      strict: q[0][PasswordDBConstants.strictColumn] == 1,
+      generatedTimestamp: q[0][PasswordDBConstants.generatedTimestampColumn],
     );
     return Future.value(entry);
   }
