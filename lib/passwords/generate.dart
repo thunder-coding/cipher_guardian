@@ -14,6 +14,7 @@ extension PasswordTypeExtension on PasswordType {
     }
   }
 }
+
 enum AlphabetCase { lowercase, uppercase, mixed }
 
 const String _lowercase = 'abcdefghijklmnopqrstuvwxyz';
@@ -50,11 +51,14 @@ String generatePassword({
 
   String alphabets = "";
   if (alphabetCase == AlphabetCase.lowercase) {
-    allowedChars += _lowercase;
+    
+    alphabets += _lowercase;
   } else if (alphabetCase == AlphabetCase.uppercase) {
-    allowedChars += _uppercase;
+    
+    alphabets += _uppercase;
   } else if (alphabetCase == AlphabetCase.mixed) {
-    allowedChars += _lowercase + _uppercase;
+    
+    alphabets += _lowercase + _uppercase;
   }
 
   if (includeSpaces) {
