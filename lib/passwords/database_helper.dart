@@ -2,20 +2,23 @@ import 'package:cipher_guardian/passwords/generate.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
+class Constants {
+  static const tableName = 'passwords';
+  static const idColumn = 'id';
+  static const domainColumn = 'domain';
+  static const usernameColumn = 'username';
+  static const lengthColumn = 'length';
+  static const passwordColumn = 'password';
+  static const passwordTypeColumn = 'password_type';
+  static const alphabetCaseColumn = 'alphabet_case';
+  static const includeSpecialCharsColumn = 'include_special_chars';
+  static const includeSpacesColumn = 'include_spaces';
+  static const strictColumn = 'strict';
+  static const generatedTimestampColumn = 'generated_timestamp';
+  static const passwordDBName = 'passwords.db';
+}
+
 class PasswordDBHelper {
-  static const _tableName = 'passwords';
-  static const _idColumn = 'id';
-  static const _domainColumn = 'domain';
-  static const _usernameColumn = 'username';
-  static const _lengthColumn = 'length';
-  static const _passwordColumn = 'password';
-  static const _passwordTypeColumn = 'password_type';
-  static const _alphabetCaseColumn = 'alphabet_case';
-  static const _includeSpecialCharsColumn = 'include_special_chars';
-  static const _includeSpacesColumn = 'include_spaces';
-  static const _strictColumn = 'strict';
-  static const _generatedTimestampColumn = 'generated_timestamp';
-  static const _passwordDBName = 'passwords.db';
   static Database? db;
   init() async {
     if (db != null) return;
@@ -33,23 +36,23 @@ class PasswordDBHelper {
     String password = await secureStorage.read(key: 'passwordDB') ?? '';
 
     db = await openDatabase(
-      _passwordDBName,
+      Constants.passwordDBName,
       version: 1,
       password: password,
       onCreate: (db, version) async {
         await db.execute('''
-      CREATE TABLE IF NOT EXISTS $_tableName (
-        $_idColumn INTEGER PRIMARY KEY AUTOINCREMENT,
-        $_domainColumn TEXT NOT NULL,
-        $_usernameColumn TEXT NOT NULL,
-        $_lengthColumn INTEGER NOT NULL,
-        $_passwordColumn TEXT NOT NULL,
-        $_passwordTypeColumn TEXT NOT NULL,
-        $_alphabetCaseColumn TEXT NOT NULL,
-        $_includeSpecialCharsColumn BOOLEAN NOT NULL,
-        $_includeSpacesColumn BOOLEAN NOT NULL,
-        $_strictColumn BOOLEAN NOT NULL,
-        $_generatedTimestampColumn INTEGER NOT NULL
+      CREATE TABLE IF NOT EXISTS ${Constants.tableName} (
+        ${Constants.idColumn} INTEGER PRIMARY KEY AUTOINCREMENT,
+        ${Constants.domainColumn} TEXT NOT NULL,
+        ${Constants.usernameColumn} TEXT NOT NULL,
+        ${Constants.lengthColumn} INTEGER NOT NULL,
+        ${Constants.passwordColumn} TEXT NOT NULL,
+        ${Constants.passwordTypeColumn} TEXT NOT NULL,
+        ${Constants.alphabetCaseColumn} TEXT NOT NULL,
+        ${Constants.includeSpecialCharsColumn} BOOLEAN NOT NULL,
+        ${Constants.includeSpacesColumn} BOOLEAN NOT NULL,
+        ${Constants.strictColumn} BOOLEAN NOT NULL,
+        ${Constants.generatedTimestampColumn} INTEGER NOT NULL
       );
     ''');
       },
@@ -68,22 +71,26 @@ class PasswordDBHelper {
     required int generatedTimestamp,
     required String password,
   }) async {
-    await db!.insert(_tableName, {
-      _domainColumn: domain,
-      _usernameColumn: username,
-      _lengthColumn: length,
-      _passwordColumn: password,
-      _passwordTypeColumn: passwordType.index,
-      _alphabetCaseColumn: alphabetCase.index,
-      _includeSpecialCharsColumn: includeSpecialChars,
-      _includeSpacesColumn: includeSpaces,
-      _strictColumn: strict,
-      _generatedTimestampColumn: generatedTimestamp,
+    await db!.insert(Constants.tableName, {
+      Constants.domainColumn: domain,
+      Constants.usernameColumn: username,
+      Constants.lengthColumn: length,
+      Constants.passwordColumn: password,
+      Constants.passwordTypeColumn: passwordType.index,
+      Constants.alphabetCaseColumn: alphabetCase.index,
+      Constants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
+      Constants.includeSpacesColumn: includeSpaces ? 1 : 0,
+      Constants.strictColumn: strict ? 1 : 0,
+      Constants.generatedTimestampColumn: generatedTimestamp,
     });
   }
 
   deletePassword(int id) async {
-    await db?.delete('passwords', where: '$_idColumn = ?', whereArgs: [id]);
+    await db?.delete(
+      'passwords',
+      where: '${Constants.idColumn} = ?',
+      whereArgs: [id],
+    );
   }
 
   updatePassword({
@@ -100,28 +107,29 @@ class PasswordDBHelper {
     required String password,
   }) async {
     await db!.update(
-      _tableName,
+      Constants.tableName,
       {
-        _domainColumn: domain,
-        _usernameColumn: username,
-        _lengthColumn: length,
-        _passwordColumn: password,
-        _passwordTypeColumn: passwordType.index,
-        _alphabetCaseColumn: alphabetCase.index,
-        _includeSpecialCharsColumn: includeSpecialChars,
-        _includeSpacesColumn: includeSpaces,
-        _strictColumn: strict,
-        _generatedTimestampColumn: generatedTimestamp,
+        Constants.domainColumn: domain,
+        Constants.usernameColumn: username,
+        Constants.lengthColumn: length,
+        Constants.passwordColumn: password,
+        Constants.passwordTypeColumn: passwordType.index,
+        Constants.alphabetCaseColumn: alphabetCase.index,
+        Constants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
+        Constants.includeSpacesColumn: includeSpaces ? 1 : 0,
+        Constants.strictColumn: strict ? 1 : 0,
+        Constants.generatedTimestampColumn: generatedTimestamp,
       },
-      where: '$_idColumn = ?',
+      where: '${Constants.idColumn} = ?',
       whereArgs: [id],
     );
   }
 
   getElementAtPos(int pos, String searchTerm) async {
     return await db!.query(
-      _tableName,
-      where: '$_domainColumn LIKE ? OR $_usernameColumn LIKE ?',
+      Constants.tableName,
+      where:
+          '${Constants.domainColumn} LIKE ? OR ${Constants.usernameColumn} LIKE ?',
       whereArgs: ['%$searchTerm%', '%$searchTerm%'],
       limit: 1,
       offset: pos,
@@ -130,19 +138,19 @@ class PasswordDBHelper {
 
   getElementAtId(int id) async {
     return await db?.query(
-      _tableName,
-      where: '$_idColumn = ?',
+      Constants.tableName,
+      where: '${Constants.idColumn} = ?',
       whereArgs: [id],
     );
   }
 
   Future<int?> getCount() async {
     return Sqflite.firstIntValue(
-      await db!.rawQuery('SELECT COUNT(*) FROM $_tableName'),
+      await db!.rawQuery('SELECT COUNT(*) FROM ${Constants.tableName}'),
     );
   }
 
   clear() async {
-    await db?.delete(_tableName);
+    await db?.delete(Constants.tableName);
   }
 }
