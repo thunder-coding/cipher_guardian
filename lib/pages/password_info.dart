@@ -43,13 +43,11 @@ class _PasswordInfoState extends State<PasswordInfo> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Center(
         child: Form(

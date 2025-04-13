@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:local_auth/local_auth.dart';
 import 'pages/totp_page.dart';
 import 'pages/settings_page.dart';
@@ -32,7 +31,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   late List<Widget> _pages;
-  List<String> _pageNames = ['Passwords', 'TOTP', 'Settings'];
+  final List<String> _pageNames = ['Passwords', 'TOTP', 'Settings'];
 
   @override
   void initState() {
