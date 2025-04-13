@@ -23,7 +23,6 @@ class _MyAppState extends State<MyApp> {
   _SupportState _supportState = _SupportState.unknown;
   AuthState _authState = AuthState.notAuthorized;
 
-  late AppLifecycleState? _appLifecycleState;
   late final AppLifecycleListener _appLifecycleListener;
 
   void _onItemTapped(int index) {
@@ -49,7 +48,6 @@ class _MyAppState extends State<MyApp> {
         });
       }
     });
-    _appLifecycleState = SchedulerBinding.instance.lifecycleState;
     _appLifecycleListener = AppLifecycleListener(
       onStateChange: (AppLifecycleState state) {
         if (state == AppLifecycleState.hidden) {
@@ -153,6 +151,12 @@ class _MyAppState extends State<MyApp> {
         }
       }(),
     );
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener.dispose();
+    super.dispose();
   }
 }
 
