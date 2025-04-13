@@ -32,20 +32,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   late List<Widget> _pages;
-  List<String> _pageNames = [
-    'Passwords',
-    'TOTP',
-    'Settings',
-  ];
+  List<String> _pageNames = ['Passwords', 'TOTP', 'Settings'];
 
   @override
   void initState() {
     super.initState();
-    _pages = [
-      PasswordPage(),
-      TOTPpage(),
-      SettingsPage(),
-    ];
+    _pages = [PasswordPage(), TOTPpage(), SettingsPage()];
     auth.isDeviceSupported().then((bool isSupported) {
       if (isSupported) {
         setState(() {

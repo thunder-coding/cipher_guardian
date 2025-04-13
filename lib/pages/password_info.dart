@@ -165,14 +165,23 @@ class _PasswordInfoState extends State<PasswordInfo> {
                       items: [
                         DropdownMenuItem(
                           value: PasswordType.alphaNumeric,
-                          child: Text(PasswordTypeExtension(PasswordType.alphaNumeric).name)),
+                          child: Text(
+                            PasswordTypeExtension(
+                              PasswordType.alphaNumeric,
+                            ).name,
+                          ),
+                        ),
                         DropdownMenuItem(
                           value: PasswordType.alpha,
-                          child: Text(PasswordTypeExtension(PasswordType.alpha).name),
+                          child: Text(
+                            PasswordTypeExtension(PasswordType.alpha).name,
+                          ),
                         ),
                         DropdownMenuItem(
                           value: PasswordType.numeric,
-                          child: Text(PasswordTypeExtension(PasswordType.numeric).name),
+                          child: Text(
+                            PasswordTypeExtension(PasswordType.numeric).name,
+                          ),
                         ),
                       ],
                       onChanged: (value) {

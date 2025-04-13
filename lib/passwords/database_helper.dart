@@ -78,7 +78,8 @@ class PasswordDBHelper {
       PasswordDBConstants.passwordColumn: password,
       PasswordDBConstants.passwordTypeColumn: passwordType.index,
       PasswordDBConstants.alphabetCaseColumn: alphabetCase.index,
-      PasswordDBConstants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
+      PasswordDBConstants.includeSpecialCharsColumn:
+          includeSpecialChars ? 1 : 0,
       PasswordDBConstants.includeSpacesColumn: includeSpaces ? 1 : 0,
       PasswordDBConstants.strictColumn: strict ? 1 : 0,
       PasswordDBConstants.generatedTimestampColumn: generatedTimestamp,
@@ -115,7 +116,8 @@ class PasswordDBHelper {
         PasswordDBConstants.passwordColumn: password,
         PasswordDBConstants.passwordTypeColumn: passwordType.index,
         PasswordDBConstants.alphabetCaseColumn: alphabetCase.index,
-        PasswordDBConstants.includeSpecialCharsColumn: includeSpecialChars ? 1 : 0,
+        PasswordDBConstants.includeSpecialCharsColumn:
+            includeSpecialChars ? 1 : 0,
         PasswordDBConstants.includeSpacesColumn: includeSpaces ? 1 : 0,
         PasswordDBConstants.strictColumn: strict ? 1 : 0,
         PasswordDBConstants.generatedTimestampColumn: generatedTimestamp,
@@ -146,7 +148,9 @@ class PasswordDBHelper {
 
   Future<int?> getCount() async {
     return Sqflite.firstIntValue(
-      await db!.rawQuery('SELECT COUNT(*) FROM ${PasswordDBConstants.tableName}'),
+      await db!.rawQuery(
+        'SELECT COUNT(*) FROM ${PasswordDBConstants.tableName}',
+      ),
     );
   }
 

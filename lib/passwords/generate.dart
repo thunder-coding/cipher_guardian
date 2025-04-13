@@ -51,13 +51,10 @@ String generatePassword({
 
   String alphabets = "";
   if (alphabetCase == AlphabetCase.lowercase) {
-    
     alphabets += _lowercase;
   } else if (alphabetCase == AlphabetCase.uppercase) {
-    
     alphabets += _uppercase;
   } else if (alphabetCase == AlphabetCase.mixed) {
-    
     alphabets += _lowercase + _uppercase;
   }
 
