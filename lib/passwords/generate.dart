@@ -28,27 +28,36 @@ String generatePassword({
   required AlphabetCase alphabetCase,
   required bool includeSpecialChars,
   required bool includeSpaces,
-  bool strict =
-      true, // Strict Mode means atleast one lowercase, one uppercase, one digit and one special character
+  // Strict Mode means at least one lowercase, one uppercase, one digit and one special character
+  bool strict = true,
 }) {
-  // NOTE: the reason why we are not individually finding the lowercase, uppoercase, digit and special character as it would reduce the entropy of the password significantly
-  String password = "";
-  String allowedChars = "";
-
-  // We are adding the special character at the end if always it is wanted
+  // Validate that length is sufficient for strict mode
+  int minRequiredLength = 0;
   if (strict) {
-    if (includeSpecialChars) {
-      length--;
+    if (includeSpecialChars) minRequiredLength++;
+    if (passwordType != PasswordType.numeric) {
+      if (alphabetCase == AlphabetCase.mixed) {
+        minRequiredLength += 2; // One lowercase + one uppercase
+      } else {
+        minRequiredLength++; // Either lowercase or uppercase
+      }
     }
-    if (alphabetCase == AlphabetCase.lowercase) {
-      length--;
-    } else if (alphabetCase == AlphabetCase.uppercase) {
-      length--;
-    } else if (alphabetCase == AlphabetCase.mixed) {
-      length -= 2;
+    if (passwordType == PasswordType.alphaNumeric ||
+        passwordType == PasswordType.numeric) {
+      minRequiredLength++; // At least one digit
+    }
+
+    if (length < minRequiredLength) {
+      throw ArgumentError(
+        'Password length too short for strict mode requirements',
+      );
     }
   }
 
+  String password = "";
+  String allowedChars = "";
+
+  // Build the character set
   String alphabets = "";
   if (alphabetCase == AlphabetCase.lowercase) {
     alphabets += _lowercase;
@@ -74,50 +83,68 @@ String generatePassword({
     allowedChars += _specialChars;
   }
 
-  // generate the password
-  for (int i = 0; i < length; i++) {
+  // Calculate adjusted length to leave room for strict mode characters
+  int adjustedLength = length;
+  if (strict) {
+    adjustedLength -= minRequiredLength;
+  }
+
+  // Generate the initial password with adjusted length
+  for (int i = 0; i < adjustedLength; i++) {
     password += allowedChars[Random.secure().nextInt(allowedChars.length)];
   }
 
-  // pick up a random special character and add it to the password at a random position
+  // Add required characters for strict mode
   if (strict) {
+    // Add special character if needed
     if (includeSpecialChars) {
       String specialChar =
           _specialChars[Random.secure().nextInt(_specialChars.length)];
-      var index = Random.secure().nextInt(length);
+      int index = Random.secure().nextInt(
+        password.length + 1,
+      ); // +1 allows appending at the end
       password =
           password.substring(0, index) +
           specialChar +
-          password.substring(index, password.length);
+          (index < password.length ? password.substring(index) : "");
     }
-    if (alphabetCase == AlphabetCase.lowercase) {
-      String lowerChar = _lowercase[Random.secure().nextInt(_lowercase.length)];
-      var index = Random.secure().nextInt(length);
+
+    // Add digit for alphaNumeric or numeric password types
+    if (passwordType == PasswordType.alphaNumeric ||
+        passwordType == PasswordType.numeric) {
+      String digitChar = _digits[Random.secure().nextInt(_digits.length)];
+      int index = Random.secure().nextInt(password.length + 1);
       password =
           password.substring(0, index) +
-          lowerChar +
-          password.substring(index, password.length);
-    } else if (alphabetCase == AlphabetCase.uppercase) {
-      String upperChar = _uppercase[Random.secure().nextInt(_uppercase.length)];
-      var index = Random.secure().nextInt(length);
-      password =
-          password.substring(0, index) +
-          upperChar +
-          password.substring(index, password.length);
-    } else if (alphabetCase == AlphabetCase.mixed) {
-      String lowerChar = _lowercase[Random.secure().nextInt(_lowercase.length)];
-      String upperChar = _uppercase[Random.secure().nextInt(_uppercase.length)];
-      var index = Random.secure().nextInt(length);
-      password =
-          password.substring(0, index) +
-          lowerChar +
-          password.substring(index, password.length);
-      index = Random.secure().nextInt(length);
-      password =
-          password.substring(0, index) +
-          upperChar +
-          password.substring(index, password.length);
+          digitChar +
+          (index < password.length ? password.substring(index) : "");
+    }
+
+    // Add lowercase/uppercase based on alphabetCase
+    if (passwordType != PasswordType.numeric) {
+      if (alphabetCase == AlphabetCase.lowercase ||
+          alphabetCase == AlphabetCase.mixed) {
+        String lowerChar =
+            _lowercase[Random.secure().nextInt(_lowercase.length)];
+        int index = Random.secure().nextInt(password.length + 1);
+        password =
+            password.substring(0, index) +
+            lowerChar +
+            (index < password.length ? password.substring(index) : "");
+      }
+
+      if (alphabetCase == AlphabetCase.uppercase ||
+          alphabetCase == AlphabetCase.mixed) {
+        String upperChar =
+            _uppercase[Random.secure().nextInt(_uppercase.length)];
+        int index = Random.secure().nextInt(password.length + 1);
+        password =
+            password.substring(0, index) +
+            upperChar +
+            (index < password.length ? password.substring(index) : "");
+      }
     }
   }
+
   return password;
 }
