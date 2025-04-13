@@ -45,112 +45,103 @@ class _TOTPpageState extends State<TOTPpage> {
           return FutureBuilder(
             future: store.getElementAtPos(index, ""),
             builder: (context, snapshot) {
-              return FutureBuilder(
-                future: store.getElementAtPos(index, ""),
-                builder: (context, snapshot) {
-                  final code =
-                      snapshot.hasData
-                          ? calculateCurrentCode(
-                            secret: snapshot.data!.secret,
-                            period: snapshot.data!.period,
-                            counter: snapshot.data!.counter,
-                            algorithm: snapshot.data!.algorithm,
-                            type: snapshot.data!.type,
-                            length: snapshot.data!.digits,
-                          ).toString().padLeft(snapshot.data!.digits, '0')
-                          : "000000";
-                  return Container(
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: GestureDetector(
-                      onLongPress: () {
-                        Clipboard.setData(ClipboardData(text: code));
-                      },
-                      child: Column(
-                        children: [
-                          LinearProgressIndicator(
-                            value:
-                                snapshot.hasData
-                                    ? (1 -
-                                        ((DateTime.now().millisecondsSinceEpoch ~/
-                                                    1000)
-                                                .remainder(
-                                                  snapshot.data!.period,
-                                                ) /
-                                            snapshot.data!.period))
-                                    : 0,
-                          ),
-                          ListTile(
-                            title: Text(
-                              snapshot.hasData ? snapshot.data!.domain : "",
-                            ),
-                            subtitle: Text(
-                              snapshot.hasData ? snapshot.data!.username : "",
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                if (snapshot.hasData) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        icon: const Icon(
-                                          Icons.warning,
-                                          color: Colors.red,
-                                        ),
-                                        title: const Text('Delete Password'),
-                                        content: const Text(
-                                          'Are you sure you want to delete this password? This action cannot be undone.',
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              store
-                                                  .remove(snapshot.data!.id)
-                                                  .then((_) {
-                                                    store.getCount().then((
-                                                      value,
-                                                    ) {
-                                                      setState(() {
-                                                        _itemCount = value;
-                                                      });
-                                                    });
-                                                  });
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Delete'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                          Text(
-                            code,
-                            style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                        ],
+              final code =
+                  snapshot.hasData
+                      ? calculateCurrentCode(
+                        secret: snapshot.data!.secret,
+                        period: snapshot.data!.period,
+                        counter: snapshot.data!.counter,
+                        algorithm: snapshot.data!.algorithm,
+                        type: snapshot.data!.type,
+                        length: snapshot.data!.digits,
+                      ).toString().padLeft(snapshot.data!.digits, '0')
+                      : "000000";
+              return Container(
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: GestureDetector(
+                  onLongPress: () {
+                    Clipboard.setData(ClipboardData(text: code));
+                  },
+                  child: Column(
+                    children: [
+                      LinearProgressIndicator(
+                        value:
+                            snapshot.hasData
+                                ? (1 -
+                                    ((DateTime.now().millisecondsSinceEpoch ~/
+                                                1000)
+                                            .remainder(snapshot.data!.period) /
+                                        snapshot.data!.period))
+                                : 0,
                       ),
-                    ),
-                  );
-                },
+                      ListTile(
+                        title: Text(
+                          snapshot.hasData ? snapshot.data!.domain : "",
+                        ),
+                        subtitle: Text(
+                          snapshot.hasData ? snapshot.data!.username : "",
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            if (snapshot.hasData) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    icon: const Icon(
+                                      Icons.warning,
+                                      color: Colors.red,
+                                    ),
+                                    title: const Text('Delete Password'),
+                                    content: const Text(
+                                      'Are you sure you want to delete this password? This action cannot be undone.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          store.remove(snapshot.data!.id).then((
+                                            _,
+                                          ) {
+                                            store.getCount().then((value) {
+                                              setState(() {
+                                                _itemCount = value;
+                                              });
+                                            });
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Delete'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      Text(
+                        code,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
               );
             },
           );
