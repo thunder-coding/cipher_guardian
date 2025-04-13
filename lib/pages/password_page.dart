@@ -56,13 +56,39 @@ class _AccTilesState extends State<AccTiles> {
                   icon: const Icon(Icons.delete),
                   onPressed: () {
                     if (snapshot.hasData) {
-                      store.remove(snapshot.data!.id).then((_) {
-                        store.getCount().then((value) {
-                          setState(() {
-                            _itemCount = value;
-                          });
-                        });
-                      });
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            icon: const Icon(Icons.warning, color: Colors.red),
+                            title: const Text('Delete Password'),
+                            content: const Text(
+                              'Are you sure you want to delete this password? This action cannot be undone.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  store.remove(snapshot.data!.id).then((_) {
+                                    store.getCount().then((value) {
+                                      setState(() {
+                                        _itemCount = value;
+                                      });
+                                    });
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                   },
                 ),
