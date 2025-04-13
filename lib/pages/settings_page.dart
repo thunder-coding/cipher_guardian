@@ -1,5 +1,5 @@
-import 'package:cipher_guardian/passwords/database_helper.dart';
-import 'package:cipher_guardian/totp/database_helper.dart';
+import 'package:cipher_guardian/passwords/store.dart';
+import 'package:cipher_guardian/totp/store.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class SettingsPage extends StatelessWidget {
             resetDatabaseDialog(
               context,
               'Passwords',
-              PasswordDBHelper(),
+              PasswordStore(),
               () {},
             );
           },
@@ -22,7 +22,7 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Reset TOTP'),
           onTap: () {
-            resetDatabaseDialog(context, 'TOTP', TOTPDBHelper(), () {});
+            resetDatabaseDialog(context, 'TOTP', TOTPStore(), () {});
           },
         ),
       ],
@@ -32,7 +32,7 @@ class SettingsPage extends StatelessWidget {
   void resetDatabaseDialog(
     BuildContext context,
     String title,
-    dynamic dbHelper,
+    dynamic store,
     VoidCallback onSuccess,
   ) {
     showDialog(
@@ -53,8 +53,8 @@ class SettingsPage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                await dbHelper.init();
-                await dbHelper.clear();
+                await store.init();
+                await store.clear();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('$title database reset successfully')),
                 );
