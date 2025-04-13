@@ -58,24 +58,20 @@ class _PasswordInfoState extends State<PasswordInfo> {
             padding: const EdgeInsets.all(20),
             shrinkWrap: true,
             children: [
-              // text input
-              Hero(
-                tag: 'domain',
-                child: TextFormField(
-                  key: _domainKey,
-                  decoration: const InputDecoration(
-                    labelText: 'Domain',
-                    border: OutlineInputBorder(),
-                  ),
-                  controller: _domainController,
-                  autovalidateMode: AutovalidateMode.always,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a domain';
-                    }
-                    return null;
-                  },
+              TextFormField(
+                key: _domainKey,
+                decoration: const InputDecoration(
+                  labelText: 'Domain',
+                  border: OutlineInputBorder(),
                 ),
+                controller: _domainController,
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a domain';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 20),
               TextFormField(
