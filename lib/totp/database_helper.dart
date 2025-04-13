@@ -1,5 +1,4 @@
 import 'package:cipher_guardian/passwords/generate.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
