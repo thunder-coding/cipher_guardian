@@ -1,4 +1,5 @@
 import 'package:cipher_guardian/passwords/generate.dart';
+import 'package:cipher_guardian/totp/impl.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
@@ -43,8 +44,8 @@ class TOTPDBHelper {
           ${TOTPDBConstants.domainColumn} TEXT NOT NULL,
           ${TOTPDBConstants.usernameColumn} TEXT NOT NULL,
           ${TOTPDBConstants.secretColumn} TEXT NOT NULL,
-          ${TOTPDBConstants.algorithmColumn} TEXT NOT NULL,
-          ${TOTPDBConstants.typeColumn} TEXT NOT NULL,
+          ${TOTPDBConstants.algorithmColumn} INTEGER NOT NULL,
+          ${TOTPDBConstants.typeColumn} INTEGER NOT NULL,
           ${TOTPDBConstants.digitsColumn} INTEGER NOT NULL,
           ${TOTPDBConstants.periodColumn} INTEGER NOT NULL,
           ${TOTPDBConstants.createdTimestampColumn} INTEGER NOT NULL,
@@ -59,8 +60,8 @@ class TOTPDBHelper {
     required String domain,
     required String username,
     required String secret,
-    required String algorithm,
-    required String type,
+    required TOTPAlgorithm algorithm,
+    required TOTPType type,
     required int digits,
     required int period,
     required int createdTimestamp,
@@ -70,8 +71,8 @@ class TOTPDBHelper {
       TOTPDBConstants.domainColumn: domain,
       TOTPDBConstants.usernameColumn: username,
       TOTPDBConstants.secretColumn: secret,
-      TOTPDBConstants.algorithmColumn: algorithm,
-      TOTPDBConstants.typeColumn: type,
+      TOTPDBConstants.algorithmColumn: algorithm.index,
+      TOTPDBConstants.typeColumn: type.index,
       TOTPDBConstants.digitsColumn: digits,
       TOTPDBConstants.periodColumn: period,
       TOTPDBConstants.createdTimestampColumn: createdTimestamp,

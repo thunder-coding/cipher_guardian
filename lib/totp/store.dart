@@ -8,7 +8,7 @@ class Entry {
   final String username;
   final String secret;
   final TOTPAlgorithm algorithm;
-  final String type; // TOTP or HOTP
+  final TOTPType type; // TOTP or HOTP
   final int digits;
   final int period;
   final int createdTimestamp;
@@ -39,7 +39,7 @@ class TOTPStore {
     required String username,
     required String secret,
     required TOTPAlgorithm algorithm,
-    required String type,
+    required TOTPType type,
     required int digits,
     required int period,
     required int createdTimestamp,
@@ -49,7 +49,7 @@ class TOTPStore {
       domain: domain,
       username: username,
       secret: secret,
-      algorithm: algorithm.name,
+      algorithm: algorithm,
       type: type,
       digits: digits,
       period: period,
@@ -66,7 +66,7 @@ class TOTPStore {
     await dbHelper.incrementTOTPCounter(id);
   }
 
-  getElementAtPos(int pos, String searchTerm) async {
+  Future<Entry> getElementAtPos(int pos, String searchTerm) async {
     final List<Map> q = await dbHelper.getElementAtPos(pos, searchTerm);
     Entry entry = Entry(
       id: q[0][TOTPDBConstants.idColumn],
@@ -74,7 +74,7 @@ class TOTPStore {
       username: q[0][TOTPDBConstants.usernameColumn],
       secret: q[0][TOTPDBConstants.secretColumn],
       algorithm: TOTPAlgorithm.values[q[0][TOTPDBConstants.algorithmColumn]],
-      type: q[0][TOTPDBConstants.typeColumn],
+      type: TOTPType.values[q[0][TOTPDBConstants.typeColumn]],
       digits: q[0][TOTPDBConstants.digitsColumn],
       period: q[0][TOTPDBConstants.periodColumn],
       createdTimestamp: q[0][TOTPDBConstants.createdTimestampColumn],

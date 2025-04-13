@@ -11,12 +11,7 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: const Text('Reset Passwords'),
           onTap: () {
-            resetDatabaseDialog(
-              context,
-              'Passwords',
-              PasswordStore(),
-              () {},
-            );
+            resetDatabaseDialog(context, 'Passwords', PasswordStore(), () {});
           },
         ),
         ListTile(

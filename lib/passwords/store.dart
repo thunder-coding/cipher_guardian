@@ -140,13 +140,9 @@ class PasswordStore {
       password: q[0][PasswordDBConstants.passwordColumn],
       length: q[0][PasswordDBConstants.lengthColumn],
       passwordType:
-          PasswordType.values[int.parse(
-            q[0][PasswordDBConstants.passwordTypeColumn],
-          )],
+          PasswordType.values[q[0][PasswordDBConstants.passwordTypeColumn]],
       alphabetCase:
-          AlphabetCase.values[int.parse(
-            q[0][PasswordDBConstants.alphabetCaseColumn],
-          )],
+          AlphabetCase.values[q[0][PasswordDBConstants.alphabetCaseColumn]],
       includeSpecialChars:
           q[0][PasswordDBConstants.includeSpecialCharsColumn] == 1,
       includeSpaces: q[0][PasswordDBConstants.includeSpacesColumn] == 1,
