@@ -49,6 +49,10 @@ class _PasswordInfoState extends State<PasswordInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add new Password'),
+        actions: [],
+      ),
       body: Center(
         child: Form(
           key: _formKey,

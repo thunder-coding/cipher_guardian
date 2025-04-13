@@ -38,6 +38,10 @@ class _TotpInfoState extends State<TotpInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add new TOTP code'),
+        actions: [],
+      ),
       body: Center(
         child: Form(
           key: _formKey,

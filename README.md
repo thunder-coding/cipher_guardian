@@ -1,16 +1,39 @@
 # cipher_guardian
 
-A new Flutter project.
+Welcome to Cipher Guardian, a privacy-focused password manager and TOTP application for Android and iOS devices.
 
-## Getting Started
+## Features
+- **Encrypted Security**: Fully encrypted password and TOTP vault
+- **Secure Storage**: Uses your device's OS secure storage mechanisms
+- **Biometric Protection**: Requires biometric authentication to access your credentials
+- **2FA Support**: Handles both TOTP and HOTP generation for two-factor authentication
+- **Password Generation**: Built-in tools to create strong passwords
+- **Complete Privacy**:
+  - Works entirely offline
+  - No internet connection required
+  - No advertisements
+  - No tracking or analytics
 
-This project is a starting point for a Flutter application.
+## Build Instructions
 
-A few resources to get you started if this is your first Flutter project:
+The project is built using Flutter. To build the project, you need to have Flutter installed on your machine. You can follow the instructions on the [Flutter website](https://flutter.dev/docs/get-started/install) to install Flutter.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+# Clone the repository
+git clone https://github.com/thunder-coding/cipher_guardian.git
+cd cipher_guardian
+# Install dependencies
+flutter pub get
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+# Build the project
+
+# For Android
+flutter build apk --release
+# For iOS
+flutter build ios --release
+```
+
+## Screenshots
+
+
